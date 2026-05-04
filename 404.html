@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#d8556e">
+  <title>Travel Plan — Te invitaron a un viaje</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+      background: linear-gradient(180deg, #fff5f7 0%, #ffffff 60%);
+      min-height: 100vh;
+      color: #1a1a1a;
+      line-height: 1.5;
+      padding: 40px 24px 60px;
+    }
+    .container {
+      max-width: 440px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .logo {
+      width: 88px;
+      height: 88px;
+      background: #d8556e;
+      border-radius: 24px;
+      margin: 24px auto 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 32px rgba(216, 85, 110, 0.25);
+    }
+    .logo svg { width: 44px; height: 44px; color: white; }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #666;
+      font-size: 17px;
+      margin-bottom: 36px;
+    }
+    .card {
+      background: white;
+      border: 1px solid #f0e6e8;
+      border-radius: 24px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .card-desc {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 18px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 16px 20px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.1s ease;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: #d8556e;
+      color: white;
+      box-shadow: 0 6px 16px rgba(216, 85, 110, 0.3);
+    }
+    .btn-secondary {
+      background: white;
+      color: #d8556e;
+      border: 1.5px solid #d8556e;
+    }
+    .footer {
+      margin-top: 32px;
+      font-size: 13px;
+      color: #999;
+    }
+    .invalid {
+      background: #fff8f8;
+      border: 1px solid #ffe0e0;
+      border-radius: 16px;
+      padding: 20px;
+      color: #c0392b;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+        <circle cx="12" cy="10" r="3"></circle>
+      </svg>
+    </div>
+
+    <div id="content-invite" style="display:none;">
+      <h1>Te invitaron a un viaje</h1>
+      <p class="subtitle">Aceptá la invitación abriendo Travel Plan</p>
+
+      <div class="card">
+        <div class="card-title">¿Ya tenés la app?</div>
+        <div class="card-desc">Tocá el botón para abrirla y unirte al viaje.</div>
+        <a id="btn-open" href="#" class="btn btn-primary">Abrir en Travel Plan</a>
+      </div>
+
+      <div class="card">
+        <div class="card-title">¿Aún no la tenés?</div>
+        <div class="card-desc">Travel Plan está en TestFlight (beta). Pedile a tu amigo el link de invitación al beta para descargarla.</div>
+      </div>
+
+      <p class="footer">
+        El link de invitación es personal y se vence en 7 días.
+      </p>
+    </div>
+
+    <div id="content-not-found" style="display:none;">
+      <h1>Página no encontrada</h1>
+      <p class="subtitle">La página que buscás no existe.</p>
+      <div class="card">
+        <div class="invalid">
+          Si llegaste acá desde un link de invitación, puede que ya esté usado o expirado. Pedile a tu amigo que te mande uno nuevo.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var path = window.location.pathname || "";
+      var match = path.match(/^\/join\/([^/?#\s]+)/);
+
+      if (match) {
+        var token = match[1];
+        var deepLink = "travelplan://join/" + token;
+
+        // Mostrar la UI de invitación
+        document.getElementById("content-invite").style.display = "block";
+        document.getElementById("btn-open").href = deepLink;
+
+        // Intentar abrir la app automáticamente. Si Universal Links no atrapó el tap
+        // (por ejemplo el usuario llegó en un browser desktop o en un context donde el
+        // sistema no asoció el dominio), el custom scheme abre la app si está instalada.
+        // En desktop / sin app instalada el redirect simplemente falla en silencio.
+        setTimeout(function () {
+          window.location.href = deepLink;
+        }, 250);
+      } else {
+        document.getElementById("content-not-found").style.display = "block";
+      }
+    })();
+  </script>
+</body>
+</html>

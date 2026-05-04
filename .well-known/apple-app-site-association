@@ -4,7 +4,7 @@
       {
         "appIDs": ["7TWQ7AC48U.com.travelplanev.app"],
         "components": [
-          { "/": "/Travel/join/*", "comment": "Trip invite links" }
+          { "/": "/join/*", "comment": "Trip invite links" }
         ]
       }
     ]
